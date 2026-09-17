@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+//step 3
 //pre-defined lookup tables for doctor specialties
 const char *specialtyNames[] = {"General Practice(OPD)",
                                  "Paediatrics",
@@ -27,10 +27,30 @@ const double dailyBedRate[] = {3000.00,
                                25,000.00};
 
 const int totalBedCapacity[] = {20,10,10,05};
+//step 4
+int bedOccupancy[4][20];
+
+//This follows the requirement to use custom functions.
+
+void initializeBeds()
+{
+  for(int i=0;i<4;i++){
+    for(int j=0;j<20;j++){
+        bedOccupancy[i][j]=0;
+    }
+  }
+}
 
 
 int main()
 {
+    initializeBeds();
+    bedOccupancy[0][0]=0;
+
+    printf("General Ward Bed 1:%d\n", bedOccupancy[0][0]);
+    printf("ICU bed 4:%d\n",bedOccupancy[3][3]);
+
+    //step 2
     int choice=0;
 
     printf("SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM\n");
