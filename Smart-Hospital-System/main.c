@@ -1,6 +1,20 @@
 #include <stdio.h>
+#define MAX_PATIENTS 100
+
+//step 5-Add patient data structures
+char patientName[MAX_PATIENTS][50];
+int patientAge[MAX_PATIENTS];
+int urgencyLevel[MAX_PATIENTS];
+int specialtyID[MAX_PATIENTS];
+int wardID[MAX_PATIENTS];
+int daysAdmitted[MAX_PATIENTS];
+
+int patientCount=0;
+
+
+
 //step 3
-//pre-defined lookup tables for doctor specialties
+//pre-defined lookup tables for doctor specialties data.
 const char *specialtyNames[] = {"General Practice(OPD)",
                                  "Paediatrics",
                                  "Cardiology",
@@ -15,7 +29,7 @@ const int consultationTimes[] = {15,20,30,30};
 
 const int dailyPatientCapacities[] = {30,20,12,10};
 
-//pre-defined lookup tables for hospital wards.
+//pre-defined lookup tables for hospital wards data.
  const char *wardNames[] = {"General Ward",
                             "Paediatric Ward",
                             "Surgical Ward",
@@ -45,12 +59,9 @@ void initializeBeds()
 int main()
 {
     initializeBeds();
-    bedOccupancy[0][0]=0;
 
-    printf("General Ward Bed 1:%d\n", bedOccupancy[0][0]);
-    printf("ICU bed 4:%d\n",bedOccupancy[3][3]);
 
-    //step 2
+    //step 2-Add main menu and navigation.
     int choice=0;
 
     printf("SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM\n");
