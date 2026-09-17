@@ -1,5 +1,33 @@
 #include <stdio.h>
 
+//pre-defined lookup tables for doctor specialties
+const char *specialtyNames[] = {"General Practice(OPD)",
+                                 "Paediatrics",
+                                 "Cardiology",
+                                 "Neurology"};
+
+const double consultationFees[] = {1500.00,
+                                  2500.00,
+                                  4500.00,
+                                  5000.00};
+
+const int consultationTimes[] = {15,20,30,30};
+
+const int dailyPatientCapacities[] = {30,20,12,10};
+
+//pre-defined lookup tables for hospital wards.
+ const char *wardNames[] = {"General Ward",
+                            "Paediatric Ward",
+                            "Surgical Ward",
+                            "ICU(Intensive Care Unit)"};
+
+const double dailyBedRate[] = {3000.00,
+                               6000.00,
+                               12,000.00,
+                               25,000.00};
+
+const int totalBedCapacity[] = {20,10,10,05};
+
 
 int main()
 {
@@ -59,6 +87,7 @@ int main()
         }
 
     }
+
 
     return 0;
 }
