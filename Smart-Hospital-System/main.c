@@ -11,6 +11,9 @@ int patientWard[MAX_PATIENTS];
 int wardID[MAX_PATIENTS];
 int daysAdmitted[MAX_PATIENTS];
 int bedID[MAX_PATIENTS];//this stores which bed was assigned to each patient.
+int waitingTime[MAX_PATIENTS];
+
+int specialtyQueueCount[4]={0};
 
 int patientCount=0;
 
@@ -59,6 +62,17 @@ void initializeBeds()
   }
 }
 
+int calculateWaitingTime(int specialty){
+
+    int queueCount = specialtyQueueCount[specialty - 1];
+
+    int averageTime = consultationTimes[specialty - 1];
+
+    return queueCount * averageTime;
+}
+
+
+
 //step 6:
 //Add patient registration-Putting the information of patients
 //(patient's name, age, urgency level,admission status,if admitted to ward wardID,
@@ -95,6 +109,10 @@ void registerPatient(){
         printf("Invalid urgency level. Please enter a valid urgency level: ");
         scanf("%d", &urgencyLevel[patientCount]);
     }
+
+
+
+
 //Specialty ID
     printf("Enter specialtyID(1-4):");
     scanf("%d",&specialtyID[patientCount]);
@@ -104,6 +122,9 @@ void registerPatient(){
         printf("Invalid specialty ID. Please enter a valid specialty ID: ");
         scanf("%d", &specialtyID[patientCount]);
     }
+//step 9- waiting time calculation
+    waitingTime[patientCount]=calculateWaitingTime(specialtyID[patientCount]);
+    specialtyQueueCount[specialtyID[patientCount]-1]++;
 
 //Ward admission status
     printf("Is the patient admitted to a ward?(1=Yes,0=No): ");
@@ -144,6 +165,7 @@ void registerPatient(){
         patientCount++;
 
         printf("\nPatient registered successfully!\n");
+        printf("Estimated waiting time: %d minutes\n",waitingTime[patientCount-1]);
     }
 
 //Function 2 - bedAllocation
@@ -198,7 +220,6 @@ void bedAllocation(int patientCount)
 
     printf("No available beds in this ward.\n");
 }
-
 
 
 int main()
