@@ -19,6 +19,9 @@ double emergencySurcharge[MAX_PATIENTS];
 double baseFee[MAX_PATIENTS];
 double wardCost[MAX_PATIENTS];
 double grossBill[MAX_PATIENTS];
+double ageDiscount[MAX_PATIENTS];
+double finalBill[MAX_PATIENTS];
+
 
 
 
@@ -104,6 +107,19 @@ double calculateGrossBill(double baseFee,double surcharge,double wardCost){
 
 }
 
+
+
+
+//age subsidy calculation
+double calculateAgeDiscount(int age,double grossBill){
+    if(age<15 || age>65){
+        return grossBill*0.15;
+    }
+    else{
+        return 0;
+    }
+
+}
 //step 6:
 //Add patient registration-Putting the information of patients
 //(patient's name, age, urgency level,admission status,if admitted to ward wardID,
@@ -201,18 +217,19 @@ void registerPatient(){
         wardID[patientCount]= 0;
         daysAdmitted[patientCount] = 0;
     }
-
-    wardCost[patientCount] =
-    calculateWardCost(wardID[patientCount],
+//Ward cost calculation
+    wardCost[patientCount] =calculateWardCost(wardID[patientCount],
                       daysAdmitted[patientCount]);
-
-    grossBill[patientCount] =
-    calculateGrossBill(baseFee[patientCount],
+//Gross bill calculation
+    grossBill[patientCount] =calculateGrossBill(baseFee[patientCount],
                        emergencySurcharge[patientCount],
                        wardCost[patientCount]);
-
-
-
+//Age discount calculation
+    ageDiscount[patientCount] =calculateAgeDiscount(patientAge[patientCount],
+                         grossBill[patientCount]);
+//Calculate final bill
+    finalBill[patientCount] =
+    grossBill[patientCount] - ageDiscount[patientCount];
 
 
         printf("\nPatient registered successfully!\n");
@@ -222,7 +239,8 @@ void registerPatient(){
         printf("Emergency surcharge:%.2f\n",emergencySurcharge[patientCount]);
         printf("Ward cost: %.2f\n",wardCost[patientCount]);
         printf("Gross bill: %.2f\n",grossBill[patientCount]);
-
+        printf("Age discount:%.2f\n",ageDiscount[patientCount]);
+        printf("Final payable amount:%.2f\n",finalBill[patientCount]);
     patientCount++;
     }
 
