@@ -15,6 +15,10 @@ int waitingTime[MAX_PATIENTS];
 
 int specialtyQueueCount[4]={0};
 
+double emergencySurcharge[MAX_PATIENTS];
+double baseFee[MAX_PATIENTS];
+
+
 int patientCount=0;
 
 //step 4
@@ -71,6 +75,19 @@ int calculateWaitingTime(int specialty){
     return queueCount * averageTime;
 }
 
+//function - Calculate emergency surcharge
+double calculateEmergencySurcharge(int urgency,double baseFee){
+
+     if (urgency==1){
+        return 0;
+     }
+     else if(urgency==2){
+        return baseFee*0.20;
+     }
+     else{
+        return baseFee*0.50;
+     }
+}
 
 
 //step 6:
@@ -122,6 +139,14 @@ void registerPatient(){
         printf("Invalid specialty ID. Please enter a valid specialty ID: ");
         scanf("%d", &specialtyID[patientCount]);
     }
+
+    baseFee[patientCount] = consultationFees[specialtyID[patientCount] - 1];
+
+    emergencySurcharge[patientCount] =
+    calculateEmergencySurcharge(urgencyLevel[patientCount],
+                                baseFee[patientCount]);
+
+
 //step 9- waiting time calculation
     waitingTime[patientCount]=calculateWaitingTime(specialtyID[patientCount]);
     specialtyQueueCount[specialtyID[patientCount]-1]++;
@@ -162,6 +187,9 @@ void registerPatient(){
         wardID[patientCount]= 0;
         daysAdmitted[patientCount] = 0;
     }
+    printf("Base consultation fee:%.2f\n",baseFee[patientCount]);
+    printf("Emergency surcharge:%.2f\n",emergencySurcharge[patientCount]);
+
         patientCount++;
 
         printf("\nPatient registered successfully!\n");
