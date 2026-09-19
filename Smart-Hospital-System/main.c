@@ -7,12 +7,15 @@ int patientAge[MAX_PATIENTS];
 int urgencyLevel[MAX_PATIENTS];
 int specialtyID[MAX_PATIENTS];
 int admittedToWard[MAX_PATIENTS];
+int patientWard[MAX_PATIENTS];
 int wardID[MAX_PATIENTS];
 int daysAdmitted[MAX_PATIENTS];
+int bedID[MAX_PATIENTS];//this stores which bed was assigned to each patient.
 
 int patientCount=0;
 
-
+//step 4
+int bedOccupancy[4][20] ={0};
 
 //step 3
 //pre-defined lookup tables for doctor specialties data.
@@ -41,9 +44,8 @@ const double dailyBedRate[] = {3000.00,
                                12000.00,
                                25000.00};
 
-const int totalBedCapacity[] = {20,10,10,5};
-//step 4
-int bedOccupancy[4][20];
+const int wardCapacity[] = {20,10,10,5};
+
 
 
 //This follows the requirement to use custom functions.
@@ -62,7 +64,7 @@ void initializeBeds()
 //(patient's name, age, urgency level,admission status,if admitted to ward wardID,
 //number of days admitted.) into the arrays.
 
-
+//Function 1-register patients
 void registerPatient(){
 
     printf("\n---Patient Registration ---\n");
@@ -75,7 +77,8 @@ void registerPatient(){
     printf("Enter patient age:");
     scanf("%d",&patientAge[patientCount]);
 
-    while(patientAge < 0){
+//step 7:Input validation
+    while(patientAge[patientCount] < 0){
 
         printf("Invalid age. Please enter a valid age: ");
         scanf("%d", &patientAge[patientCount]);
@@ -120,7 +123,7 @@ void registerPatient(){
         while (wardID[patientCount]<1 || wardID[patientCount]>4){
 
             printf("Invalid ward ID. Please enter a valid ward ID:");
-            scanf("%d",wardID[patientCount]);
+            scanf("%d",&wardID[patientCount]);
         }
 
         printf("Enter number of days admitted :");
@@ -143,6 +146,58 @@ void registerPatient(){
         printf("\nPatient registered successfully!\n");
     }
 
+//Function 2 - bedAllocation
+
+void bedAllocation(int patientCount)
+{
+    int patientID;
+
+    printf("\n---Bed Allocation---\n");
+
+    printf("Enter patient number: ");
+    scanf("%d", &patientID);
+
+    if (patientID < 1 || patientID > patientCount)
+    {
+        printf("Invalid patient number.\n");
+        return;
+    }
+
+    if (bedID[patientID - 1] != 0)
+    {
+        printf("A bed has already been allocated to this patient.\n");
+        printf("Bed number: %d\n", bedID[patientID - 1]);
+        return;
+    }
+
+    int patientWardID = wardID[patientID-1];
+
+
+//search for an available bed
+    for (int i = 0; i < wardCapacity[patientWardID - 1]; i++)
+    {
+        if (bedOccupancy[patientWardID - 1][i] == 0)
+        {
+            bedOccupancy[patientWardID - 1][i] = 1;
+
+            bedID[patientID - 1] = i + 1;
+
+            printf("Bed allocated successfully.\n");
+
+            printf("Patient: %s\n",
+                   patientName[patientID - 1]);
+
+            printf("Ward: %s\n",
+                   wardNames[patientWardID - 1]);
+
+            printf("Bed Number: %d\n",
+                   bedID[patientID - 1]);
+            return;
+        }
+    }
+
+    printf("No available beds in this ward.\n");
+}
 
 
 
@@ -156,18 +211,14 @@ int main()
 
     printf("SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM\n");
 
-    while(choice !=9){
+    while(choice !=5){
 
         printf("\n");
         printf("1.Register Patient\n");
-        printf("2.Display Patients\n");
-        printf("3.Search Patient\n");
-        printf("4.Allocate Bed\n");
-        printf("5.Calculate Bill\n");
-        printf("6.Priority Queue\n");
-        printf("7.Reports\n");
-        printf("8.Save Data\n");
-        printf("9.Exit\n");
+        printf("2.Allocate Bed\n");
+        printf("3.Display Patients\n");
+        printf("4.Generate Report\n");
+        printf("5.Exit\n");
 
         printf("\nEnter your choice:");
         scanf("%d",&choice);
@@ -179,29 +230,18 @@ int main()
                 registerPatient();
                 break;
             case 2:
-                printf("Display Patient selected.\n");
+                bedAllocation(patientCount);
                 break;
             case 3:
-                printf("Search Patient selected.\n");
+                printf("Display Patient selected.\n");
                 break;
             case 4:
-                printf("Allocate Bed selected.\n");
+                printf("Generate Report selected.\n");
                 break;
             case 5:
-                printf("Calculate Bill selected.\n");
-                break;
-            case 6:
-                printf("Priority Queue selected.\n");
-                break;
-            case 7:
-                printf("Reports selected.\n");
-                break;
-            case 8:
-                printf("Save data selected.\n");
-                break;
-            case 9:
                 printf("Exiting the program selected.\n");
                 break;
+
             default:
                 printf("Invalid choice. Please try again.\n");
 
