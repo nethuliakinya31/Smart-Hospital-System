@@ -17,6 +17,9 @@ int specialtyQueueCount[4]={0};
 
 double emergencySurcharge[MAX_PATIENTS];
 double baseFee[MAX_PATIENTS];
+double wardCost[MAX_PATIENTS];
+double grossBill[MAX_PATIENTS];
+
 
 
 int patientCount=0;
@@ -88,7 +91,18 @@ double calculateEmergencySurcharge(int urgency,double baseFee){
         return baseFee*0.50;
      }
 }
+//calculate ward cost
+double calculateWardCost(int ward,int days){
+       if (ward==0){
+        return 0;
+       }
+       return dailyBedRate[ward-1]*days;
+}
+//calculate gross bill
+double calculateGrossBill(double baseFee,double surcharge,double wardCost){
+     return baseFee + surcharge + wardCost;
 
+}
 
 //step 6:
 //Add patient registration-Putting the information of patients
@@ -187,14 +201,33 @@ void registerPatient(){
         wardID[patientCount]= 0;
         daysAdmitted[patientCount] = 0;
     }
-    printf("Base consultation fee:%.2f\n",baseFee[patientCount]);
-    printf("Emergency surcharge:%.2f\n",emergencySurcharge[patientCount]);
 
-        patientCount++;
+    wardCost[patientCount] =
+    calculateWardCost(wardID[patientCount],
+                      daysAdmitted[patientCount]);
+
+    grossBill[patientCount] =
+    calculateGrossBill(baseFee[patientCount],
+                       emergencySurcharge[patientCount],
+                       wardCost[patientCount]);
+
+
+
+
 
         printf("\nPatient registered successfully!\n");
+
         printf("Estimated waiting time: %d minutes\n",waitingTime[patientCount-1]);
+        printf("Base consultation fee:%.2f\n",baseFee[patientCount]);
+        printf("Emergency surcharge:%.2f\n",emergencySurcharge[patientCount]);
+        printf("Ward cost: %.2f\n",wardCost[patientCount]);
+        printf("Gross bill: %.2f\n",grossBill[patientCount]);
+
+    patientCount++;
     }
+
+
+
 
 //Function 2 - bedAllocation
 
