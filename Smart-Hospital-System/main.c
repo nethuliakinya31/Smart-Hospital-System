@@ -6,6 +6,7 @@ char patientName[MAX_PATIENTS][50];
 int patientAge[MAX_PATIENTS];
 int urgencyLevel[MAX_PATIENTS];
 int specialtyID[MAX_PATIENTS];
+int admittedToWard[MAX_PATIENTS];
 int wardID[MAX_PATIENTS];
 int daysAdmitted[MAX_PATIENTS];
 
@@ -44,6 +45,7 @@ const int totalBedCapacity[] = {20,10,10,05};
 //step 4
 int bedOccupancy[4][20];
 
+
 //This follows the requirement to use custom functions.
 
 void initializeBeds()
@@ -55,11 +57,58 @@ void initializeBeds()
   }
 }
 
+//step 6:
+//Add patient registration-Putting the information of patients
+//(patient's name, age, urgency level,admission status,if admitted to ward wardID,
+//number of days admitted.) into the arrays.
+
+
+void registerPatient(){
+
+    printf("\n---Patient Registration ---\n");
+
+    printf("Enter patient name:");
+    scanf(" %[^\n]",patientName[patientCount]);
+
+    printf("Enter patient age:");
+    scanf("%d",&patientAge[patientCount]);
+
+    printf("Enter urgency level(1=Normal, 2=Urgent, 3=Critical):");
+    scanf("%d",&urgencyLevel[patientCount]);
+
+    printf("Enter specialtyID(1-4):");
+    scanf("%d",&specialtyID[patientCount]);
+
+    printf("Is the patient admitted to a ward?(1=Yes,0=No): ");
+    scanf("%d",&admittedToWard[patientCount]);
+
+    if (admittedToWard[patientCount] == 1){
+
+        printf("Enter ward ID (1-4) :");
+        scanf("%d",&wardID[patientCount]);
+
+        printf("Enter number of days admitted :");
+        scanf("%d",&daysAdmitted[patientCount]);
+
+    }
+    else
+        {
+
+        wardID[patientCount]= 0;
+        daysAdmitted[patientCount] = 0;
+    }
+        patientCount++;
+
+        printf("\nPatient registered successfully!\n");
+    }
+
+
+
 
 int main()
 {
     initializeBeds();
-
+    registerPatient();
 
     //step 2-Add main menu and navigation.
     int choice=0;
@@ -86,7 +135,7 @@ int main()
         {
 
             case 1:
-                printf("Register Patient selected.\n");
+                registerPatient();
                 break;
             case 2:
                 printf("Display Patient selected.\n");
