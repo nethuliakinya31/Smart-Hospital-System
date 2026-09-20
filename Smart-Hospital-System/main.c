@@ -442,6 +442,117 @@ void displayAdmissionBill(int patientID){
 
 
 
+// Requirement 6 - Performance Reports and Analytics
+void generateReport()
+{
+    int normalCount = 0;
+    int urgentCount = 0;
+    int criticalCount = 0;
+
+    double totalRevenue = 0.0;
+    double totalDiscount = 0.0;
+
+    int highestPatient = 0;
+    double highestBill = 0.0;
+
+    // Check if there are no patients
+    if (patientCount == 0)
+    {
+        printf("\nNo patients have been registered yet.\n");
+        return;
+    }
+
+    // Calculate patient statistics
+    for (int i = 0; i < patientCount; i++)
+    {
+        // Count patients according to urgency
+        if (urgencyLevel[i] == 1)
+        {
+            normalCount++;
+        }
+        else if (urgencyLevel[i] == 2)
+        {
+            urgentCount++;
+        }
+        else if (urgencyLevel[i] == 3)
+        {
+            criticalCount++;
+        }
+
+        // Calculate total revenue
+        totalRevenue += finalBill[i];
+
+        // Calculate total discounts
+        totalDiscount += ageDiscount[i];
+
+        // Find highest-paying patient
+        if (finalBill[i] > highestBill)
+        {
+            highestBill = finalBill[i];
+            highestPatient = i;
+        }
+    }
+
+    printf("\n====================================================\n");
+    printf("        SMART HOSPITAL PERFORMANCE REPORT\n");
+    printf("====================================================\n");
+
+    // 1. Total patients and urgency levels
+    printf("\nPATIENT SUMMARY\n");
+    printf("----------------------------------------------------\n");
+    printf("Total Patients Registered : %d\n", patientCount);
+    printf("Normal Patients           : %d\n", normalCount);
+    printf("Urgent Patients           : %d\n", urgentCount);
+    printf("Critical Patients         : %d\n", criticalCount);
+
+    // 2. Revenue and discounts
+    printf("\nREVENUE SUMMARY\n");
+    printf("----------------------------------------------------\n");
+    printf("Total Revenue             : LKR %.2f\n", totalRevenue);
+    printf("Total Discounts Granted   : LKR %.2f\n", totalDiscount);
+
+    // 3. Bed occupancy
+    printf("\nBED OCCUPANCY\n");
+    printf("----------------------------------------------------\n");
+
+    for (int i = 0; i < 4; i++)
+    {
+        int occupiedBeds = 0;
+
+        for (int j = 0; j < wardCapacity[i]; j++)
+        {
+            if (bedOccupancy[i][j] == 1)
+            {
+                occupiedBeds++;
+            }
+        }
+
+        double occupancyPercentage =
+            ((double)occupiedBeds / wardCapacity[i]) * 100;
+
+        printf("%-25s : %d/%d beds (%.2f%%)\n",
+               wardNames[i],
+               occupiedBeds,
+               wardCapacity[i],
+               occupancyPercentage);
+    }
+
+    // 4. Highest-paying patient
+    printf("\nHIGHEST-PAYING PATIENT\n");
+    printf("----------------------------------------------------\n");
+    printf("Patient Name              : %s\n",
+           patientName[highestPatient]);
+
+    printf("Patient ID                : PAT-%04d\n",
+           1000 + highestPatient + 1);
+
+    printf("Total Bill                : LKR %.2f\n",
+           highestBill);
+
+    printf("====================================================\n");
+}
+
+
 
 
 int main()
@@ -454,7 +565,7 @@ int main()
 
     printf("SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM\n");
 
-    while(choice !=5){
+    while(choice !=6){
 
         printf("\n");
         printf("1.Register Patient\n");
@@ -492,7 +603,11 @@ int main()
                  }
 
             case 5:
-                printf("Exiting the program selected.\n");
+                generateReport();
+                break;
+
+            case 6:
+                printf("Exiting the program.\n");
                 break;
 
             default:
