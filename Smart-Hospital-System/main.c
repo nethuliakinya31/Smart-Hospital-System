@@ -301,6 +301,46 @@ void bedAllocation(int patientCount)
 }
 
 
+//Display priority order of patients
+void displayPriorityPatients(){
+
+      int order[MAX_PATIENTS];
+      //store patient indexes
+      for (int i=0;i<patientCount;i++){
+        order[i]=i;
+      }
+
+      //Bubble sort according to urgency
+      for(int i=0; i<patientCount ; i++){
+        for (int j=0;j<patientCount - i - 1 ;j++){
+            if (urgencyLevel[order[j]]<urgencyLevel[order[j+1]]){
+                int temp=order[j];
+                order[j]=order[j+1];
+                order[j+1]=temp;
+            }
+        }
+    }
+//Display patients in priority order
+printf("\n--- Patient Priority List ---\n");
+
+for (int i = 0; i < patientCount; i++)
+    {
+        int index = order[i];
+
+        printf("Patient %d : %s | Urgency Level: %d\n",index + 1,patientName[index],urgencyLevel[index]);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 int main()
 {
     initializeBeds();
@@ -333,7 +373,7 @@ int main()
                 bedAllocation(patientCount);
                 break;
             case 3:
-                printf("Display Patient selected.\n");
+                displayPriorityPatients();
                 break;
             case 4:
                 printf("Generate Report selected.\n");
